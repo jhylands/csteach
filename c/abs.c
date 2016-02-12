@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int abs_val(int x);
+
+int main(void)
+{
+	int x;
+	x=-1;
+	x=abs_val(x);
+	printf("Hello, Nikita!\n %d \n", x);
+}
+
+int abs_val(int x){
+	if(x<0){
+		return x*-1;
+	}else{
+		return x;
+	}
+}

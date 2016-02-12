@@ -1,0 +1,5 @@
+(define (test num)
+	(case num)
+	((1) 'hello))
+	((2) 'yes ))
+)

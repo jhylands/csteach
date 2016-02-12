@@ -1,0 +1,146 @@
+- Pascal-FC for IBM PC compatibles - 
+- GNU Compiler Version P5.4
+
+G L Davies  &  A Burns, University of York
+
+Compiler listing
+
+    1     0 program  mutex;
+    2     0 var   C : integer;
+    3     0 var flag1: boolean;
+    4     0 var flag2: boolean;
+    5     0 
+    6     0 process  type P1;
+    7     0 var l : integer;
+    8     0 begin
+    9     0    for l := 1 to 20 do
+   10     4 begin
+   11     4       while flag2 do
+   12     6            null;
+   13     7       flag1 := true;
+   14    10       C := C + 1;
+   15    15       flag1 :=false
+   16    16 end
+   17    18 end;
+   18    20 
+   19    20 process  type P2;
+   20    20 var l : integer;
+   21    20 begin
+   22    20    while flagstart do
+***********                  ^ 0 
+   23    22       null;
+   24    23    for l := 1 to 20 do
+   25    27 begin
+   26    27       while flag1 do
+   27    29            null;
+   28    30       flag2 := true;
+   29    33       C := C + 1;
+   30    38       flag2 :=false
+   31    39 end
+   32    41 end;
+   33    43 
+   34    43 var call1 : P1;
+   35    43 var call2 : P2;
+   36    43 
+   37    43 begin
+   38    43    C := 0;
+   39    46    flagstart := true;
+***********            ^ 0 ------
+   40    46    flag1 := false;
+   41    49    flag2 := false;
+   42    52    cobegin
+   43    53       call1;
+   44    57       call2
+   45    57    coend;
+   46    62 write(C)
+   47    64 end.
+
+ Error diagnostics
+
+E0 -  undeclared identifier
+
+
+
+Symbol table
+
+    name       link      objekt       type         ref      nrm  lev  adr  aux
+
+ 45 _main        44     procedure   notyp           2      True    0   43    0
+ 46 any           0     variable    synch           0      True    1    5    0
+ 47 c            46     variable    integer         0      True    1    5    0
+ 48 flag1        47     variable    boolean         0      True    1    6    0
+ 49 flag2        48     variable    boolean         0      True    1    7    0
+ 50 p1           49     type id     process         3      True    1    0    0
+ 51 l             0     variable    integer         0      True    2    5    0
+ 52 p2           50     type id     process         4      True    1   20    0
+ 53 l             0     variable    integer         0      True    2    5    0
+ 54 call1        52     variable    process         3      True    1    8    0
+ 55 call2        54     variable    process         4      True    1    9    0
+
+Generated P-code
+
+    0     ldadr        2         5          ;8
+    1     ldcon.i      0         1          ;9
+    2     ldcon.i      0        20          ;9
+    3     for1u.i      0        19          ;9
+    4     ldval.b      1         7          ;11
+    5     jmpiz        0         7          ;11
+    6     jmpuc        0         4          ;11
+    7     ldadr        1         6          ;12
+    8     ldcon.b      0         1          ;13
+    9     store.b      0         0          ;13
+   10     ldadr        1         5          ;13
+   11     ldval.i      1         5          ;14
+   12     ldcon.i      0         1          ;14
+   13     addop.i      0         0          ;14
+   14     store.i      0         0          ;14
+   15     ldadr        1         6          ;14
+   16     ldcon.b      0         0          ;15
+   17     store.b      0         0          ;15
+   18     for2u.i      0         4          ;15
+   19     rproc        1         0          ;16
+   20     ldval        0         0          ;22
+   21     jmpiz        0        23          ;22
+   22     jmpuc        0        20          ;22
+   23     ldadr        2         5          ;23
+   24     ldcon.i      0         1          ;24
+   25     ldcon.i      0        20          ;24
+   26     for1u.i      0        42          ;24
+   27     ldval.b      1         6          ;26
+   28     jmpiz        0        30          ;26
+   29     jmpuc        0        27          ;26
+   30     ldadr        1         7          ;27
+   31     ldcon.b      0         1          ;28
+   32     store.b      0         0          ;28
+   33     ldadr        1         5          ;28
+   34     ldval.i      1         5          ;29
+   35     ldcon.i      0         1          ;29
+   36     addop.i      0         0          ;29
+   37     store.i      0         0          ;29
+   38     ldadr        1         7          ;29
+   39     ldcon.b      0         0          ;30
+   40     store.b      0         0          ;30
+   41     for2u.i      0        27          ;30
+   42     rproc        1         0          ;31
+   43     ldadr        1         5          ;37
+   44     ldcon.i      0         0          ;38
+   45     store.i      0         0          ;38
+   46     ldadr        1         6          ;39
+   47     ldcon.b      0         0          ;40
+   48     store.b      0         0          ;40
+   49     ldadr        1         7          ;40
+   50     ldcon.b      0         0          ;41
+   51     store.b      0         0          ;41
+   52     cobeg        0         0          ;41
+   53     mkstk        1        50          ;42
+   54     ldadr        1         8          ;42
+   55     procv        0         0          ;42
+   56     calls        1         4          ;42
+   57     mkstk        1        52          ;43
+   58     ldadr        1         9          ;43
+   59     procv        0         0          ;43
+   60     calls        1         4          ;43
+   61     coend        0         0          ;44
+   62     ldval.i      1         5          ;46
+   63     wrval.i      0         0          ;46
+   64     stopx        0         0          ;46
